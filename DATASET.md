@@ -1,12 +1,12 @@
-# 数据集准备说明
+# Dataset Preparation Guide
 
-## 数据来源
+## Data Source
 
-本项目使用脑部 MRI 脑肿瘤二分类数据集（Kaggle 来源）。
+This project uses a Kaggle brain MRI dataset for binary classification (tumor vs healthy).
 
-## 目录结构要求
+## Required Directory Structure
 
-请在项目根目录下准备如下结构（与 `Model_Comparison.ipynb` 默认路径一致）：
+Prepare the following structure under the project root (matches the default paths in `Model_Comparison.ipynb`):
 
 ```text
 Brain-Tumor-Detection-CNN-vs-ViT/
@@ -22,18 +22,18 @@ Brain-Tumor-Detection-CNN-vs-ViT/
          └─ ...
 ```
 
-## 文件说明
+## File Description
 
-- `metadata.csv`: 原始元数据（包含 image / class / format / mode / shape）
-- `metadata_rgb_only.csv`: 仅 RGB 样本元数据（主实验推荐）
-- `Brain Tumor/`: 肿瘤类图像目录
-- `Healthy/`: 健康类图像目录
+- `metadata.csv`: Original metadata (`image / class / format / mode / shape`)
+- `metadata_rgb_only.csv`: RGB-only metadata (recommended for main experiment)
+- `Brain Tumor/`: Tumor image directory
+- `Healthy/`: Healthy image directory
 
-## Notebook 默认读取路径
+## Default Notebook Paths
 
-`Model_Comparison.ipynb` 默认使用以下路径：
+`Model_Comparison.ipynb` reads the following by default:
 - `metadata_rgb_only.csv`
 - `Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor`
 - `Brain Tumor Data Set/Brain Tumor Data Set/Healthy`
 
-如果你本地目录不同，请在 notebook 的路径配置单元中修改 `PROJECT_ROOT`、`DATA_ROOT` 等变量。
+If your local directory structure is different, update variables such as `PROJECT_ROOT` and `DATA_ROOT` in the notebook path configuration cell.

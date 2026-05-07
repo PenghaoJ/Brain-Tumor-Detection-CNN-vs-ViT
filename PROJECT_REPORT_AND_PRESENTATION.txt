@@ -1,0 +1,144 @@
+Brain-Tumor-Detection-CNN-vs-ViT
+Project Report and Presentation Summary
+
+1) Project Background and Goal
+- This project focuses on binary classification of brain MRI images: tumor vs healthy.
+- The core objective is to compare two deep learning approaches on the same task:
+  - CNN (Convolutional Neural Network)
+  - ViT-style Transformer classifier
+- The comparison is designed to be fair by using:
+  - Consistent data split strategy
+  - Unified training/evaluation pipeline
+  - Same metric set for final analysis
+
+2) What We Built in This Project
+- A main experiment notebook:
+  - Model_Comparison.ipynb
+- Supporting data and outputs:
+  - metadata.csv
+  - metadata_rgb_only.csv
+  - comparison_summary.csv
+  - model_comparison_line.png
+- Project documentation:
+  - README.md
+  - DATASET.md
+  - MODEL_COMPARISON_GUIDE.md
+
+3) End-to-End Workflow
+Step A: Environment and dependency checks
+- Verify Python executable and package availability.
+- Detect missing dependencies before training starts.
+- Handle Windows TensorFlow path/DLL issues using a short virtual environment path.
+
+Step B: Data loading and validation
+- Read metadata_rgb_only.csv as the primary metadata source.
+- Construct absolute image paths from:
+  - Brain Tumor Data Set/Brain Tumor Data Set/Brain Tumor
+  - Brain Tumor Data Set/Brain Tumor Data Set/Healthy
+- Filter out invalid/missing file paths.
+- Convert labels to numeric form:
+  - tumor -> 1
+  - healthy -> 0
+
+Step C: Dataset split strategy
+- Stratified split to preserve class balance:
+  - train / validation / test
+- Quick mode is enabled for faster experimentation:
+  - Stratified subsampling on each split
+
+Step D: Model building
+- CNN_Light:
+  - Stacked Conv2D + MaxPooling blocks
+  - Dense + Dropout head
+  - Sigmoid output for binary classification
+
+- Transformer_Light:
+  - Patch embedding from image patches (16x16 stride)
+  - Learnable positional embeddings
+  - Repeated Transformer encoder blocks:
+    - LayerNorm + Multi-Head Attention + Residual
+    - LayerNorm + MLP + Residual
+  - Global pooling + MLP head + Sigmoid output
+
+Step E: Training setup
+- Optimizer: Adam
+- Loss: binary_crossentropy
+- Metrics:
+  - Accuracy
+  - AUC
+  - Precision
+  - Recall
+- Callbacks:
+  - EarlyStopping (monitor val_auc)
+  - ReduceLROnPlateau (monitor val_loss)
+
+Step F: Evaluation and analysis
+- Evaluate both models on test set.
+- Produce:
+  - classification report
+  - confusion matrix
+  - ROC curve
+  - summary table (comparison_summary.csv)
+- Visualization:
+  - Training history (accuracy/loss)
+  - Confusion matrices
+  - ROC curves
+  - Final metric line chart
+
+4) Main Results (Current Saved Output)
+From comparison_summary.csv:
+- CNN_Light:
+  - Accuracy: 0.6347
+  - AUC: 0.7282
+  - Precision: 0.7027
+  - Recall: 0.5714
+  - F1 (tumor): 0.6303
+
+- Transformer_Light:
+  - Accuracy: 0.5449
+  - AUC: 0.5637
+  - Precision: 0.5449
+  - Recall: 1.0000
+  - F1 (tumor): 0.7054
+
+Interpretation:
+- CNN performs better on overall discrimination quality (Accuracy/AUC/Precision).
+- Transformer achieves much higher tumor recall, which is important when missed tumors are costly.
+- Therefore, model choice depends on objective:
+  - Better aggregate classification performance -> CNN
+  - Better missed-tumor protection -> Transformer
+
+5) Runtime Verification We Completed
+- Initial run in deep path .venv failed with TensorFlow DLL/path-length related issue.
+- We switched to short-path environment (C:\venv311bt) and re-ran.
+- Full notebook execution succeeded and generated:
+  - Model_Comparison.executed.ipynb
+
+6) What This Project Contributes
+- A reproducible CNN vs ViT comparison template for medical image binary classification.
+- Practical engineering fixes for Windows deep-path TensorFlow failures.
+- A metric-driven decision framework:
+  - Accuracy/AUC-oriented model selection
+  - Recall-oriented model selection for clinical-risk scenarios
+
+7) Limitations
+- Quick mode uses subsampling; results are trend-oriented rather than final production-grade benchmarks.
+- Single dataset/source; external generalization remains unverified.
+- No cross-validation currently implemented.
+- Clinical deployment requires calibration, robustness checks, and external validation.
+
+8) Recommended Next Steps
+- Disable quick mode and run full-data training for final benchmark.
+- Add repeated runs / cross-validation for confidence intervals.
+- Explore threshold tuning for recall-precision trade-off.
+- Add model explainability (e.g., Grad-CAM / attention visualization).
+- Create a final slide deck directly from:
+  - comparison_summary.csv
+  - model_comparison_line.png
+  - confusion matrix and ROC outputs
+
+9) One-Slide Executive Summary (for presentation opening)
+- We implemented a full experimental pipeline to compare CNN and ViT on brain tumor MRI binary classification.
+- Under identical splits and metrics, CNN achieved better overall Accuracy/AUC, while Transformer achieved stronger tumor recall.
+- For general performance goals, CNN is preferable; for minimizing missed tumors, Transformer is preferable.
+- The project is now reproducible with a validated runtime path and complete documentation.
