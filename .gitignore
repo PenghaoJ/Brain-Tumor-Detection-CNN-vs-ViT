@@ -1,1 +1,8 @@
 .venv/
+__pycache__/
+.ipynb_checkpoints/
+*.h5
+*.keras
+*.ckpt
+*.tfevents*
+*.tmp
